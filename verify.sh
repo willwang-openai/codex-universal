@@ -33,11 +33,11 @@ for ((i=max-1; i>=0; i--)); do
   CODEX_ENV_RUBY_VERSION=${RUBY[i]:-${RUBY[0]}} \
   CODEX_ENV_PHP_VERSION=${PHP[i]:-${PHP[0]}} \
   CODEX_ENV_JAVA_VERSION=${JAVA[i]:-${JAVA[0]}} \
-  bash -c '
+  bash -lc '
     printf "\n\nTesting setup_universal with versions:\n"
     env | grep "^CODEX_ENV_" | sort
     printf "\n"
-    exec /opt/codex/setup_universal.sh
+    /opt/codex/setup_universal.sh
   '
 done
 

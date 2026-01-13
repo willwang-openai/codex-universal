@@ -131,7 +131,6 @@ RUN git -c advice.detachedHead=0 clone --depth 1 https://github.com/pyenv/pyenv.
     && src/configure \
     && make -C src \
     && pyenv install $PYTHON_VERSIONS \
-    && pyenv global "${PYTHON_VERSIONS%% *}" \
     && rm -rf "$PYENV_ROOT/cache"
 
 # Install pipx for common global package managers (e.g. poetry)
@@ -325,16 +324,16 @@ RUN chmod +x /opt/codex/setup_universal.sh
 ### VERIFICATION SCRIPT ###
 
 COPY verify.sh /opt/verify.sh
-RUN --network=none chmod +x /opt/verify.sh \
-    && bash -lc 'PYTHON_VERSIONS="$PYTHON_VERSIONS" \
-        NODE_VERSIONS="18 20 22" \
+RUN chmod +x /opt/verify.sh \
+    && PYTHON_VERSIONS="$PYTHON_VERSIONS" \
+        NODE_VERSIONS="24 22 20 18" \
         RUST_VERSIONS="$RUST_VERSIONS" \
         GO_VERSIONS="$GO_VERSIONS" \
         SWIFT_VERSIONS="$SWIFT_VERSIONS" \
         RUBY_VERSIONS="$RUBY_VERSIONS" \
         PHP_VERSIONS="$PHP_VERSIONS" \
         JAVA_VERSIONS="$( [ "$TARGETARCH" = "arm64" ] && echo "$ARM_JAVA_VERSIONS" || echo "$AMD_JAVA_VERSIONS" )" \
-        "/opt/verify.sh"'
+        "/opt/verify.sh"
 
 ### ENTRYPOINT ###
 
