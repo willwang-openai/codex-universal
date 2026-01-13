@@ -118,13 +118,12 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 ### PYTHON ###
 
-ARG PYENV_VERSION=v2.6.10
-ARG PYTHON_VERSIONS="3.10 3.11 3.12 3.13 3.14"
+ARG PYTHON_VERSIONS="3.14 3.13 3.12 3.11 3.10"
 
 # Install pyenv
 ENV PYENV_ROOT=/root/.pyenv
 ENV PATH=$PYENV_ROOT/bin:$PATH
-RUN git -c advice.detachedHead=0 clone --branch "$PYENV_VERSION" --depth 1 https://github.com/pyenv/pyenv.git "$PYENV_ROOT" \
+RUN git -c advice.detachedHead=0 clone --depth 1 https://github.com/pyenv/pyenv.git "$PYENV_ROOT" \
     && echo 'export PYENV_ROOT="$HOME/.pyenv"' >> /etc/profile \
     && echo 'export PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"' >> /etc/profile \
     && echo 'eval "$(pyenv init - bash)"' >> /etc/profile \
@@ -238,7 +237,7 @@ RUN --mount=type=cache,target=/root/.cargo/registry \
 
 ### RUBY ###
 
-ARG RUBY_VERSIONS="3.2.3 3.3.8 3.4.4"
+ARG RUBY_VERSIONS="3.4.4 3.3.8 3.2.3"
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     --mount=type=cache,target=/root/.cache/mise \
