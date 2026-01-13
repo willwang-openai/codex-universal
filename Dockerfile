@@ -326,7 +326,16 @@ RUN chmod +x /opt/codex/setup_universal.sh
 ### VERIFICATION SCRIPT ###
 
 COPY verify.sh /opt/verify.sh
-RUN chmod +x /opt/verify.sh && bash -lc "/opt/verify.sh"
+RUN --network=none chmod +x /opt/verify.sh \
+    && bash -lc 'PYTHON_VERSIONS="$PYTHON_VERSIONS" \
+        NODE_VERSIONS="18 20 22" \
+        RUST_VERSIONS="$RUST_VERSIONS" \
+        GO_VERSIONS="$GO_VERSIONS" \
+        SWIFT_VERSIONS="$SWIFT_VERSIONS" \
+        RUBY_VERSIONS="$RUBY_VERSIONS" \
+        PHP_VERSIONS="$PHP_VERSIONS" \
+        JAVA_VERSIONS="$( [ "$TARGETARCH" = "arm64" ] && echo "$ARM_JAVA_VERSIONS" || echo "$AMD_JAVA_VERSIONS" )" \
+        "/opt/verify.sh"'
 
 ### ENTRYPOINT ###
 
